@@ -3,3 +3,10 @@ spring:
     name: dg-gateway
   profiles:
     active: local
+  cloud:
+    config:
+      profile: local
+      label: develop
+      discovery:
+        enabled: true
+        service-id: dg-spring-config
