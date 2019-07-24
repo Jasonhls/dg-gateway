@@ -3,10 +3,12 @@ spring:
     name: dg-gateway
   profiles:
     active: local
+
+# 初期先使用用本地配置文件，稳定以后采用 config
   cloud:
     config:
-      profile: local
+      profile: dev
       label: develop
       discovery:
-        enabled: true
+        enabled: false
         service-id: dg-spring-config

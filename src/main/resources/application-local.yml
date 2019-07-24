@@ -1,0 +1,88 @@
+# 正则过滤不需要权限验证地址
+filter:
+  path: .*?swagger.*?|.*?/v2/api-docs|.*?/csrf
+
+feign:
+  hystrix:
+    enabled: false
+  client:
+    config:
+      default:
+        connectTimeout: 1000  #创建连接的超时时间 单位：毫秒
+        readTimeout: 5000    #处理请求的超时时间 单位：毫秒
+        errorDecoder: com.dg.mall.core.feign.RosesFeignErrorDecoder
+        requestInterceptors:
+          - com.dg.mall.gateway.core.feign.GatewayFeignHeaderProcessInterceptor
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 2000
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 20   #服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除(默认90秒)
+    lease-renewal-interval-in-seconds: 5       #服务刷新时间配置，每隔这个时间会主动心跳一次(默认30秒)
+  client:
+    service-url:
+      defaultZone: http://192.168.11.159:8761/eureka
+    registry-fetch-interval-seconds: 10  #重新刷新服务地址的时间
+
+dg:
+  log:
+    kafka: false
+    trace: false
+    level: error,info
+
+jwt:
+  secret: abcdefg
+  expiration: 82800
+
+spring:
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+  aop:
+    proxy-target-class: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 30MB
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    listener:
+      type: BATCH
+    producer:
+      batchSize: 500
+      keySerializer: org.apache.kafka.common.serialization.StringSerializer
+      valueSerializer: com.dg.mall.logger.serizlizer.FastjsonKafkaSerializer
+  boot:
+    admin:
+      client:
+        url: http:127.0.0.1:9000
+  cloud:
+    gateway:
+      enabled: true
+      routes:
+      - id: dg-admin
+        uri: lb://dg-admin
+        predicates:
+          - Path=/dg-admin/**
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
