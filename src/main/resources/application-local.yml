@@ -30,7 +30,7 @@ eureka:
     lease-renewal-interval-in-seconds: 5       #服务刷新时间配置，每隔这个时间会主动心跳一次(默认30秒)
   client:
     service-url:
-      defaultZone: http://192.168.11.159:8761/eureka
+      defaultZone: http://127.0.0.1:8761/eureka
     registry-fetch-interval-seconds: 10  #重新刷新服务地址的时间
 
 dg:
@@ -71,10 +71,10 @@ spring:
     gateway:
       enabled: true
       routes:
-      - id: dg-admin
-        uri: lb://dg-admin
+      - id: dg-system
+        uri: lb://dg-system
         predicates:
-          - Path=/dg-admin/**
+          - Path=/system/**
 
 
 

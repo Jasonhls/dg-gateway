@@ -7,6 +7,7 @@ spring:
 # 初期先使用用本地配置文件，稳定以后采用 config
   cloud:
     config:
+      enabled: false
       profile: dev
       label: develop
       discovery:
