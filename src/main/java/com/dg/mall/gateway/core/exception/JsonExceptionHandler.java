@@ -121,9 +121,13 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
      */
     protected Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         Map<String, Object> result = exceptionHandlerResult.get();
-        return ServerResponse.status((HttpStatus) result.get("httpStatus"))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+
+        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(BodyInserters.fromObject(result.get("body")));
+
+//        return ServerResponse.status((HttpStatus) result.get("httpStatus"))
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .body(BodyInserters.fromObject(result.get("body")));
     }
 
     /**

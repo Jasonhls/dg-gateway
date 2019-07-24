@@ -63,10 +63,6 @@ spring:
       batchSize: 500
       keySerializer: org.apache.kafka.common.serialization.StringSerializer
       valueSerializer: com.dg.mall.logger.serizlizer.FastjsonKafkaSerializer
-  boot:
-    admin:
-      client:
-        url: http:127.0.0.1:9000
   cloud:
     gateway:
       enabled: true
@@ -74,7 +70,7 @@ spring:
       - id: dg-system
         uri: lb://dg-system
         predicates:
-          - Path=/system/**
+          - Path=/dg-system/**
 
 
 
