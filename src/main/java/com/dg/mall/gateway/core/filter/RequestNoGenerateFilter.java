@@ -39,7 +39,7 @@ public class RequestNoGenerateFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
         //生成唯一请求号uuid
-        String requestNo = IdWorker.get32UUID();
+        String requestNo = IdWorker.getIdStr();
         serverHttpResponse.getHeaders().add(RosesConstants.REQUEST_NO_HEADER_NAME, requestNo);
         return chain.filter(exchange);
     }
