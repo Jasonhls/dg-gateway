@@ -23,7 +23,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * 鉴权服务的消费者
  */
 
-@FeignClient(value = "user-service")
+@FeignClient(value = "dg-system")
 public interface AuthServiceConsumer extends AuthService {
 
 }

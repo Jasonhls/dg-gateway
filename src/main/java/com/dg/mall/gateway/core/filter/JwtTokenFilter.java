@@ -17,6 +17,7 @@ package com.dg.mall.gateway.core.filter;
 
 
 import com.dg.mall.core.util.RegexUtil;
+import com.dg.mall.gateway.core.constants.AuthConstants;
 import com.dg.mall.gateway.core.constants.GatewayFiltersOrder;
 import com.dg.mall.gateway.core.exception.AuthExceptionEnum;
 import com.dg.mall.gateway.modular.service.TokenValidateService;
@@ -45,7 +46,6 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
     private String filterPath;
 
 
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
@@ -53,12 +53,17 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
 
         String path = serverHttpRequest.getPath().pathWithinApplication().value();
 
-        if(!RegexUtil.matcher(filterPath, path)){
-            if(!tokenValidateService.doValidate(serverHttpRequest)){
-                throw new ServiceException(AuthExceptionEnum.TOKEN_ERROR);
+        //忽略诸如 登录、校验token、退出登录等 请求
+        if (AuthConstants.AUTH_ACTION_URL.equals(path) || AuthConstants.VALIDATE_TOKEN_URL.equals(path)
+                || AuthConstants.LOGOUT_URL.equals(path)) {
+            //忽略 配置文件中指定的url 不进行token验证
+            if (!RegexUtil.matcher(filterPath, path)) {
+                if (!tokenValidateService.doValidate(serverHttpRequest)) {
+                    throw new ServiceException(AuthExceptionEnum.TOKEN_ERROR);
+                }
             }
-        }
 
+        }
         return chain.filter(exchange);
     }
 

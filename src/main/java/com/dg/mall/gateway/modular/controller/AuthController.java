@@ -20,44 +20,51 @@ import com.dg.mall.core.reqres.response.ResponseData;
 import com.dg.mall.gateway.core.constants.AuthConstants;
 import com.dg.mall.gateway.modular.consumer.AuthServiceConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 /**
- * 登录控制器
- *
- * @author fengshuonan
- * @date 2017-11-08-下午7:04
+ * 鉴权服务
  */
 @RestController
-public class LoginController {
+public class AuthController {
 
     @Autowired
     private AuthServiceConsumer authServiceConsumer;
 
     /**
-     * 登录接口
+     * 登录
+     *
+     * @param userName
+     * @param password
+     * @return
      */
-    @RequestMapping(AuthConstants.AUTH_ACTION_URL)
+    @PostMapping(AuthConstants.AUTH_ACTION_URL)
     public ResponseData auth(@RequestParam("userName") String userName, @RequestParam("password") String password) {
         String token = authServiceConsumer.login(userName, password);
         return ResponseData.success(token);
     }
 
+
     /**
-     * 验证token是否正确
+     * 校验 token
+     *
+     * @param token
+     * @return
      */
-    @RequestMapping(AuthConstants.VALIDATE_TOKEN_URL)
+    @PostMapping(AuthConstants.VALIDATE_TOKEN_URL)
     public ResponseData validateToken(@RequestParam("token") String token) {
         boolean tokenFlag = authServiceConsumer.checkToken(token);
         return ResponseData.success(tokenFlag);
     }
 
     /**
-     * 退出接口
+     * 退出登录
+     *
+     * @param token
+     * @return
      */
-    @RequestMapping(AuthConstants.LOGOUT_URL)
+    @PostMapping(AuthConstants.LOGOUT_URL)
     public ResponseData logout(@RequestParam("token") String token) {
         authServiceConsumer.logout(token);
         return ResponseData.success();
