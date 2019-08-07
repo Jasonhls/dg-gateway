@@ -3,7 +3,7 @@ filter:
   path: .*?swagger.*?|.*?/v2/api-docs|.*?/csrf
 
 server:
-  port: 8000
+  port: 80
 
 
 feign:
