@@ -23,6 +23,9 @@ import com.dg.mall.gateway.core.exception.AuthExceptionEnum;
 import com.dg.mall.gateway.modular.consumer.AuthServiceConsumer;
 import com.dg.mall.jwt.properties.JwtProperties;
 import com.dg.mall.model.exception.ServiceException;
+import com.dg.mall.system.api.context.LoginContext;
+import com.dg.mall.system.api.context.LoginUser;
+import com.dg.mall.system.api.context.SysMenuDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -33,6 +36,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -57,7 +61,16 @@ public class PathMatchFilter implements GlobalFilter, Ordered {
 
         if(!RegexUtil.matcher(filterPath, path)){
             final String sysToken = serverHttpRequest.getHeaders().getFirst(AuthConstants.MANAGE_AUTH_HEADER);
-            Set<Object> permissionUrls = authServiceConsumer.getLoginUserByToken(sysToken).getResourceUrls();
+            LoginUser loginUser = LoginContext.me().getLoginUser();
+            if(loginUser == null){
+                throw new ServiceException(AuthExceptionEnum.NO_PERMISSION);
+            }
+            Set<SysMenuDTO>  menus = loginUser.getMenus();
+            if(menus == null || menus.size() < 1){
+                throw new ServiceException(AuthExceptionEnum.NO_PERMISSION);
+            }
+            Set<String> permissionUrls = menus.stream().map(menu -> menu.getUrl()).collect(Collectors.toSet());
+
             boolean hasPermission = permissionUrls.contains(path);
             if (hasPermission) {
                 return null;
