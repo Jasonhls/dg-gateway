@@ -44,7 +44,7 @@ dg:
     level: error,info
 
 jwt:
-  secret: abcdefg
+  secret: dd9397d36dd64baf9d28b63ca476b635
   expiration: 82800
 
 spring:
