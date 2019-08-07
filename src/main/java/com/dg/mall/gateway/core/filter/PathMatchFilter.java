@@ -69,7 +69,7 @@ public class PathMatchFilter implements GlobalFilter, Ordered {
             if(menus == null || menus.size() < 1){
                 throw new ServiceException(AuthExceptionEnum.NO_PERMISSION);
             }
-            Set<String> permissionUrls = menus.stream().map(menu -> menu.getUrl()).collect(Collectors.toSet());
+            Set<String> permissionUrls = menus.stream().map(menu -> menu.getRedirect()).collect(Collectors.toSet());
 
             boolean hasPermission = permissionUrls.contains(path);
             if (hasPermission) {
