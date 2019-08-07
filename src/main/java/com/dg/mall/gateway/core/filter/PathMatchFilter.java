@@ -68,7 +68,7 @@ public class PathMatchFilter implements GlobalFilter, Ordered {
             Set<SysMenuDTO> sysMenuDTOS = loginUser.getMenus();
             Set<String> permissionUrls= new HashSet<>();
             if(CollectionUtil.isNotEmpty(sysMenuDTOS)){
-                sysMenuDTOS.forEach(s -> permissionUrls.add(s.getUrl()));
+                sysMenuDTOS.forEach(s -> permissionUrls.add(s.getPath()));
             }
             boolean hasPermission = permissionUrls.contains(path);
             if (hasPermission) {
