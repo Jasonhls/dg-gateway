@@ -85,6 +85,16 @@
         <dependency>
             <groupId>com.dg.mall</groupId>
             <artifactId>dg-system-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jetty</artifactId>
+                </exclusion>
+            </exclusions>
             <version>${project.version}</version>
         </dependency>
 
