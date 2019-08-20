@@ -18,9 +18,16 @@ package com.dg.mall.gateway.modular.controller;
 
 import com.dg.mall.core.reqres.response.ResponseData;
 import com.dg.mall.gateway.core.constants.AuthConstants;
-import com.dg.mall.gateway.modular.consumer.AuthServiceConsumer;
+import com.dg.mall.gateway.core.exception.AuthExceptionEnum;
+import com.dg.mall.model.exception.ServiceException;
+import com.dg.mall.system.api.feign.AuthFeignService;
+import com.dg.mall.system.api.req.LoginReq;
+import com.dg.mall.system.api.req.ToeknReq;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -30,43 +37,41 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private AuthServiceConsumer authServiceConsumer;
+    private AuthFeignService authFeignService;
 
     /**
      * 登录
      *
-     * @param userName
-     * @param password
      * @return
      */
     @PostMapping(AuthConstants.AUTH_ACTION_URL)
-    public ResponseData auth(@RequestParam("userName") String userName, @RequestParam("password") String password) {
-        String token = authServiceConsumer.login(userName, password);
-        return ResponseData.success(token);
+    public ResponseData auth(@Validated @RequestBody LoginReq loginReq) {
+        return authFeignService.login(loginReq);
+
     }
 
 
     /**
      * 校验 token
-     *
-     * @param token
      * @return
      */
     @PostMapping(AuthConstants.VALIDATE_TOKEN_URL)
-    public ResponseData validateToken(@RequestParam("token") String token) {
-        boolean tokenFlag = authServiceConsumer.checkToken(token);
+    public ResponseData validateToken(@Validated @RequestBody ToeknReq tokenReq) {
+        boolean tokenFlag;
+        try {
+            tokenFlag = authFeignService.checkToken(tokenReq);
+        } catch (Exception e) {
+            throw new ServiceException(AuthExceptionEnum.TOKEN_ERROR);
+        }
         return ResponseData.success(tokenFlag);
     }
 
     /**
      * 退出登录
-     *
-     * @param token
-     * @return
      */
     @PostMapping(AuthConstants.LOGOUT_URL)
-    public ResponseData logout(@RequestParam("token") String token) {
-        authServiceConsumer.logout(token);
+    public ResponseData logout(@Validated @RequestBody ToeknReq tokenReq) {
+        authFeignService.logout(tokenReq);
         return ResponseData.success();
     }
 

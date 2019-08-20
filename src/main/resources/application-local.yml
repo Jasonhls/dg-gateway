@@ -3,7 +3,7 @@ filter:
   path: .*?swagger.*?|.*?/v2/api-docs|.*?/csrf
 
 server:
-  port: 80
+  port: 8000
 
 
 feign:
@@ -15,8 +15,7 @@ feign:
         connectTimeout: 1000  #创建连接的超时时间 单位：毫秒
         readTimeout: 5000    #处理请求的超时时间 单位：毫秒
         errorDecoder: com.dg.mall.core.feign.RosesFeignErrorDecoder
-        requestInterceptors:
-          - com.dg.mall.gateway.core.feign.GatewayFeignHeaderProcessInterceptor
+        requestInterceptors: com.dg.mall.gateway.core.feign.GatewayFeignHeaderProcessInterceptor
 
 hystrix:
   command:
@@ -71,12 +70,12 @@ spring:
     gateway:
       enabled: true
       routes:
-      - id: dg-system
-        uri: lb://dg-system
-        predicates:
-          - Path=/dg-system/**
-        filters:
-          - StripPrefix=1
+        - id: dg-system
+          uri: lb://dg-system
+          predicates:
+            - Path=/dg-system/**
+          filters:
+            - StripPrefix=1
 
 
 
@@ -89,3 +88,10 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+
+
+
+
+

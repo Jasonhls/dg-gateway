@@ -54,8 +54,8 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
         String path = serverHttpRequest.getPath().pathWithinApplication().value();
 
         //忽略诸如 登录、校验token、退出登录等 请求
-        if (AuthConstants.AUTH_ACTION_URL.equals(path) || AuthConstants.VALIDATE_TOKEN_URL.equals(path)
-                || AuthConstants.LOGOUT_URL.equals(path)) {
+        if (!AuthConstants.AUTH_ACTION_URL.equals(path) || !AuthConstants.VALIDATE_TOKEN_URL.equals(path)
+                || !AuthConstants.LOGOUT_URL.equals(path)) {
             //忽略 配置文件中指定的url 不进行token验证
             if (!RegexUtil.matcher(filterPath, path)) {
                 if (!tokenValidateService.doValidate(serverHttpRequest)) {
@@ -71,4 +71,6 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
     public int getOrder() {
         return GatewayFiltersOrder.JWT_TOKEN_FILTER_ORDER;
     }
+
+
 }

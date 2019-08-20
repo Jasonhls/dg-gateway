@@ -21,12 +21,12 @@ import com.dg.mall.core.util.RegexUtil;
 import com.dg.mall.gateway.core.constants.AuthConstants;
 import com.dg.mall.gateway.core.constants.GatewayFiltersOrder;
 import com.dg.mall.gateway.core.exception.AuthExceptionEnum;
-import com.dg.mall.gateway.modular.consumer.AuthServiceConsumer;
 import com.dg.mall.jwt.properties.JwtProperties;
 import com.dg.mall.model.exception.ServiceException;
 import com.dg.mall.system.api.context.LoginUser;
 import com.dg.mall.system.api.context.SysMenuDTO;
 import com.dg.mall.system.api.exception.enums.SystemExceptionEnum;
+import com.dg.mall.system.api.feign.AuthFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -37,6 +37,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -53,7 +54,7 @@ public class PathMatchFilter implements GlobalFilter, Ordered {
     private String filterPath;
 
     @Autowired
-    private AuthServiceConsumer authServiceConsumer;
+    private AuthFeignService authFeignService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -63,9 +64,9 @@ public class PathMatchFilter implements GlobalFilter, Ordered {
 
         if(!RegexUtil.matcher(filterPath, path)){
             final String sysToken = serverHttpRequest.getHeaders().getFirst(AuthConstants.MANAGE_AUTH_HEADER);
-            LoginUser loginUser = (LoginUser) authServiceConsumer.getLoginUserByToken(sysToken);
+            LoginUser loginUser = authFeignService.getLoginUserByToken(sysToken);
             Optional.ofNullable(loginUser).orElseThrow(() -> new ServiceException(SystemExceptionEnum.USER_NOT_FOUND));
-            Set<SysMenuDTO> sysMenuDTOS = loginUser.getMenus();
+            List<SysMenuDTO> sysMenuDTOS = loginUser.getMenus();
             Set<String> permissionUrls= new HashSet<>();
             if(CollectionUtil.isNotEmpty(sysMenuDTOS)){
                 sysMenuDTOS.forEach(s -> permissionUrls.add(s.getPath()));

@@ -17,7 +17,6 @@ package com.dg.mall.gateway.config;
 
 
 import com.dg.mall.gateway.core.filter.JwtTokenFilter;
-import com.dg.mall.gateway.core.filter.PathMatchFilter;
 import com.dg.mall.gateway.core.filter.RequestNoGenerateFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,11 +47,11 @@ public class FilterConfig {
     /**
      * 资源过滤器，检查每次请求是否有权限访问某些资源
 
-    @Bean
-    public PathMatchFilter pathMatchFilter() {
-        return new PathMatchFilter();
-    }
      */
+//    @Bean
+//    public PathMatchFilter pathMatchFilter() {
+//        return new PathMatchFilter();
+//    }
 
 
 

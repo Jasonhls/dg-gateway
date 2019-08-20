@@ -28,7 +28,9 @@ public enum AuthExceptionEnum implements AbstractBaseExceptionEnum {
 
     TOKEN_EMPTY(8001, "登录令牌为空，请检查是否已经登录"),
     TOKEN_ERROR(8002, "token无效"),
-    NO_PERMISSION(8003, "没有访问该资源的权限");
+    NO_PERMISSION(8003, "没有访问该资源的权限"),
+    LOGIN_PARAM_EMPTY(8004, "用户名或者密码不能为空"),
+    PARAM_EMPTY(8005, "请求参数不能为空");
 
     AuthExceptionEnum(int code, String message) {
         this.code = code;

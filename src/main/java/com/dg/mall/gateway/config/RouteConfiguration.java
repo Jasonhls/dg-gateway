@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.cors.reactive.CorsUtils;
-import org.springframework.web.filter.reactive.HiddenHttpMethodFilter;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
@@ -17,7 +16,7 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class RouteConfiguration {
 	// 这里为支持的请求头，如果有自定义的header字段请自己添加（不知道为什么不能使用*）
-	private static final String ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type, Authorization, credential, X-XSRF-TOKEN, x-auth-token, x-auth-source";
+	private static final String ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type, Authorization, credential, Manage_Authorization";
 	private static final String ALLOWED_METHODS = "*";
 	private static final String ALLOWED_ORIGIN = "*";
 	private static final String ALLOWED_Expose = "*";
