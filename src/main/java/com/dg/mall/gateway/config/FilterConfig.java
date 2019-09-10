@@ -17,6 +17,7 @@ package com.dg.mall.gateway.config;
 
 
 import com.dg.mall.gateway.core.filter.JwtTokenFilter;
+import com.dg.mall.gateway.core.filter.PathMatchFilter;
 import com.dg.mall.gateway.core.filter.RequestNoGenerateFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

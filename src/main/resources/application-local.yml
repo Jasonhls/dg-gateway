@@ -70,12 +70,12 @@ spring:
     gateway:
       enabled: true
       routes:
-        - id: dg-system
-          uri: lb://dg-system
-          predicates:
-            - Path=/dg-system/**
-          filters:
-            - StripPrefix=1
+      - id: dg-system
+        uri: lb://dg-system
+        predicates:
+          - Path=/dg-system/**
+        filters:
+          - StripPrefix=1
 
 
 
